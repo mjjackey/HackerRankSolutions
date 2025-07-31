@@ -1,15 +1,15 @@
 """
-Based on the password user input, write a function to extract the unique substring of the password,
+Based on the pwd user input, write a function to extract the unique substring of the pwd,
 the length of the substring is k. Return the number of the distinct substring.
 """
-def unique_substring_num(password:str, k:int)->int:
-    if not password or len(password)==0:
+def unique_substring_num(pwd:str, k:int)->int:
+    if not pwd or len(pwd)==0:
         return 0
-    sub_password_set=set()
-    for i in range(len(password)-k+1):
-        sub_password=password[i:i+k]
-        sub_password_set.add(sub_password)
-    return len(sub_password_set)
+    sub_pwd_set=set()
+    for i in range(len(pwd) - k + 1):
+        sub_pwd= pwd[i:i + k]
+        sub_pwd_set.add(sub_pwd)
+    return len(sub_pwd_set)
 
 if __name__=='__main__':
     s="abcabc"
