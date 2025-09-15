@@ -20,6 +20,7 @@ def top_n_common(str_text:str, n:int):
     letters = ''.join(words_lst)
     letter_count_dict = Counter(letters)
 
+    # sort the dict first based on values descending then on keys ascending
     sorted_words = sorted(word_count_dict.items(), key = lambda x:(-x[1],x[0]))
     sorted_letters = sorted(letter_count_dict.items(), key = lambda x:(-x[1],x[0]))
 
