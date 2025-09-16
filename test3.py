@@ -9,7 +9,7 @@ class IncreaseList(list):
         if iterable == None:
             super().__init__()
         else:
-            if not self.is_asending():
+            if not self.is_increasing():
                 raise ValueError("Initial elements are not non-decreasing!")
             super().__init__(iterable)
 
@@ -33,7 +33,7 @@ class IncreaseList(list):
     def __str__(self):
         return f"IncreaseList: {super().__str__()}, The length of the list : {self.__len__()}"
 
-    def is_asending(self):
+    def is_increasing(self):
         return all(self[i]<self[i+1] for i in range(self.len()-1))
 
 
