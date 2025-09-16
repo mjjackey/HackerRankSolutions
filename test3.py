@@ -40,7 +40,7 @@ class IncreaseList(list):
 class MyIncreaseList:
     def __init__(self, items=None):
         self._data = list(items) if items else []
-        if not self.is_asending():
+        if not self.is_increasing():
             raise ValueError("Initial elements are not non-decreasing!")
 
     def __len__(self):
@@ -62,7 +62,7 @@ class MyIncreaseList:
             self._data.append(item)
         # print(f"The length of the list : {len(self)}")
 
-    def is_asending(self):
+    def is_increasing(self):
         return all(self._data[i] < self._data[i + 1] for i in range(len(self) - 1))
 
 if __name__ == '__main__':
