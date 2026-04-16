@@ -38,7 +38,7 @@ def processLogs(logs:list, maxSpan:int)-> list:
 
     for lon_info in logs:
         log_info_strs = lon_info.split(" ")
-        if (len(log_info_strs) == 3):
+        if len(log_info_strs) == 3:
             user_ids.append(log_info_strs[0])
         else:
             print("Invalid log format: ", lon_info)
@@ -47,27 +47,57 @@ def processLogs(logs:list, maxSpan:int)-> list:
     user_ids_set = set(user_ids)
     log_item_list = []
     log_item_info_dict = {}
-    for id in user_ids_set:
+    for id_str in user_ids_set:
         log_time_dict = {"sign-in":None, "sign-out":None}  # Set to store sign-in and sign-out times
-        if id not in log_item_info_dict.keys():
-            log_item_info_dict[id]=log_time_dict # Add user ID to the log item info
+        if id_str not in log_item_info_dict.keys():
+            log_item_info_dict[id_str]=log_time_dict # Add user ID to the log item info
         else:
-            log_time_dict = log_item_info_dict[id]  # Get the existing dict for this user ID
+            log_time_dict = log_item_info_dict[id_str]  # Get the existing dict for this user ID
         for log_info in logs:
             log_info_strs = log_info.split(" ")
-            if id in log_info_strs:
+            if id_str in log_info_strs:
                 if "sign-in" in log_info_strs:
                     sign_in_time = int(log_info_strs[1])
-                    log_time_dict["sign-in"]=sign_in_time
+                    log_time_dict["sign-in"] = sign_in_time
                 elif "sign-out" in log_info_strs:
                     sign_out_time = int(log_info_strs[1])
-                    log_time_dict["sign-out"]=sign_out_time
-        log_item_list.append([id,log_item_info_dict[id]["sign-in"], log_item_info_dict[id]["sign-out"]])
+                    log_time_dict["sign-out"] = sign_out_time
+        log_item_list.append([id_str, log_item_info_dict[id_str]["sign-in"], log_item_info_dict[id_str]["sign-out"]])
     sorted(log_item_list, key=lambda x: x[2]-x[1])  # Sort by the time difference
     log_times = filter(lambda x: (x[2] - x[1]) >= maxSpan, log_item_list)  # Filter by maxSpan
-    result = [next(iter(s)) for s in log_times]
-    return result
+    results = [next(iter(s)) for s in log_times]
+    return results
 
+def processLogs2(logs:list, maxSpan:int)-> list:
+    # Write your code here
+    log_item_info_dict = {}
+
+    for lon_info in logs:
+        log_info_strs = lon_info.split(" ")
+        if len(log_info_strs) == 3:
+            id_str = log_info_strs[0]
+            log_time_dict: {str:int} = {"sign-in": None, "sign-out": None}  # Set to store sign-in and sign-out times
+            if id_str not in log_item_info_dict.keys():
+                log_item_info_dict[id_str] = log_time_dict  # Add user ID to the log item info
+            else:
+                log_time_dict = log_item_info_dict[id_str]  # Get the existing dict for this user ID
+            assert isinstance(log_info_strs[1], str)
+            if log_info_strs[2] == "sign-in":
+                log_time_dict["sign-in"] = int(log_info_strs[1])
+            elif log_info_strs[2] == "sign-out":
+                log_time_dict["sign-out"] = int(log_info_strs[1])
+        else:
+            print("Invalid log format: ", lon_info)
+            exit(1)
+
+    log_item_list = []
+    for key in log_item_info_dict.keys():
+        log_item_list.append([key, log_item_info_dict[key]["sign-in"], log_item_info_dict[key]["sign-out"]])
+
+    sorted(log_item_list, key=lambda x: x[2] - x[1])  # Sort by the time difference
+    log_times = filter(lambda x: (x[2] - x[1]) >= maxSpan, log_item_list)  # Filter by maxSpan
+    results = [next(iter(s)) for s in log_times]
+    return results
 
 if __name__ == '__main__':
     os.environ['OUTPUT_PATH'] = 'output.txt'  # Set output path for testing
@@ -84,7 +114,8 @@ if __name__ == '__main__':
 
     maxSpan = int(input().strip())
 
-    result = processLogs(logs, maxSpan)
+    result = processLogs2(logs, maxSpan)
+    print(result)
 
     fptr.write('\n'.join(result))
     fptr.write('\n')
