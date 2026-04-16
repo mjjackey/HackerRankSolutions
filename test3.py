@@ -6,7 +6,7 @@ len(self): output the size when updating the list
 """
 class IncreaseList(list):
     def __init__(self, iterable):
-        if iterable == None:
+        if iterable is None:
             super().__init__()
         else:
             if not self.is_increasing():
